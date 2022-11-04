@@ -4,8 +4,8 @@ input = sys.stdin.readline
 INF = int(1e9) # 무한을 의미하는 값 1e9 = 10억
 
 # 노드의 개수, 간선의 개수를 입력받기
-n = 7 #시작노드(출발지) 포함해서 7개의 구역을 돌아다닐 예정
-m = 5040 #모든 노드에서 모든 노드로 이동할 수 있어야 함. 따라서 7! = 5040
+n = 6 #시작구역(출발지) 포함해서 6개의 구역을 돌아다닐 예정
+m = 720 #모든 노드에서 모든 노드로 이동할 수 있어야 함. 따라서 6! = 720
 # 시작 노드 번호를 입력받기
 start = 1 #물류센터의 출발점은 항상 1로 정해져있음.
 # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만듦
@@ -13,13 +13,16 @@ graph=[[] for i in range(n+1)]
 # 최단 거리 테이블을 모두 무한으로 초기화
 distance = [INF] *(n+1)
 
-# 모든 간선 정보를 입력받기
-for _ in range(m):
-    a,b,c=map(int, input().split())
-    # a 번 노드에서 b 번 노드로 가는 비용이 c 라는 의미
-    graph[a].append((b,c))
 
 def dijkstra(start):
+    #파일 읽어오기
+    # 모든 간선 정보를 입력받기
+    for a in range(m):
+        a = b
+        for b in range(m):
+            c=map(int, input().split()) #파일 입출력으로 알아내기
+    # a 번 노드에서 b 번 노드로 가는 비용이 c 라는 의미
+    graph[a].append((b,c))
     q=[]
     # 시작 노드로 가기 위한 최단 경로는 0으로 설정하여, 큐에 삽입
     heapq.heappush(q, (0, start))
