@@ -47,5 +47,7 @@ for i in range(1, n+1):
     if distance[i]==INF:
         print("INFINITY")
     # 도달할 수 있는 경우 거기를 추력
+
+    #ㅗ디ㅣ
     else:
         print(distance[i])
