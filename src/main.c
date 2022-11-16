@@ -14,6 +14,7 @@ typedef struct location {
 	double y;			//y축 위치
 	double waiting;	//인기도
 	char name[MAX];	//놀이기구 이름
+	int visit;	//방문여부 저장 -> 방문했으면 값을 1로 바꾸어서 재방문하지 않도록 함.
 }loca;
 
 //route[i]: 출발지에서 i라는 놀이기구까지 드는 최소 거리와 그 놀이기구까지 도달하는데 거치는 놀이기구
@@ -26,27 +27,40 @@ loca attractionInfo[MAX];	//놀이기구들의 위치 info[0]은 시작위치에 대한 값임.
 route routeInfo[MAX];	//최소거리로 i번째 놀이기구에 방문하는 방법의 놀이기구 방문순서와 해당 node까지 드는 거리 계산한 것 저장
 double edge[MAX][MAX];	//edge값 저장 2차원 배열
 int order[MAX];	//방문한 놀이기구들을 순서대로 저장함.
+int cnt = 0;	//0이면 거리정보랑 인기도를 처음에 랜덤으로 초기화해줌. 1 이상이면 인기도만 랜덤으로 바뀜
+				// + 현재 위치 기준으로 방문 놀이기구 업데이트 할 때도 사용
 
-double calEdge();	//위치 기준으로 거리 계산하는 함수
+void calEdge();	//위치 기준으로 거리 계산하는 함수
 int minDistance();	//최소거리 계산함수
-//void printSolution();
-void dijkstra();	//다익스트라 알고리즘 수행
+void printSolution();
+void dijkstra(int);	//다익스트라 알고리즘 수행
 
-double calEdge() {
+void calEdge() {
 
-	for (int i = 0;i < MAX;i++) {
-		attractionInfo[i].x = rand() % 100 + 1; //0-100까지의 범위에서 무작위로 정수값 하나 받아옴.
-		attractionInfo[i].y = rand() % 100 + 1; //동일
-		attractionInfo[i].waiting = rand() % 10 + 1; //놀이기구의 인기도
+	if (cnt == 0) {
+		for (int i = 0;i < MAX;i++) {
+			attractionInfo[i].x = rand() % 100 + 1; //0-100까지의 범위에서 무작위로 정수값 하나 받아옴.
+			attractionInfo[i].y = rand() % 100 + 1; //동일
+			attractionInfo[i].waiting = rand() % 10 + 20; //놀이기구의 인기도
+		}
+
+		//거리값은 변하지 않기 때문에 한번만 계산해줌!! waiting값만 가중치로 설정해 min 값 비교에 이용만 함.
+		for (int i = 0;i < MAX;i++) {
+			for (int j = 0;j < MAX;j++) {
+				if (i == j) {
+					edge[i][j] = 0;	//만약 i와 j가 동일하다면(a놀이기구에서 a놀이기구로 가는 값은 0) 0으로 초기화
+				}
+				else {
+					edge[i][j] = sqrt(pow(attractionInfo[i].x - attractionInfo[j].x, 2) + pow(attractionInfo[i].y - attractionInfo[j].y, 2));	//i지점과 j지점의 거리계산 함수
+				}
+			}
+		}
 	}
 
-	for (int i = 0;i < MAX;i++) {
-		for (int j = 0;j < MAX;j++) {
-			if (i == j) {
-				edge[i][j] = 0;	//만약 i와 j가 동일하다면(a놀이기구에서 a놀이기구로 가는 값은 0) 0으로 초기화
-			}
-			else {
-				edge[i][j] = sqrt(pow(attractionInfo[i].x - attractionInfo[j].x, 2) + pow(attractionInfo[i].y - attractionInfo[j].y, 2));	//i지점과 j지점의 거리계산 함수
+	else if (cnt >= 1) {
+		for (int i = 0;i < MAX;i++) {
+			if (attractionInfo[i].visit == 0) {	//방문하지 않았다면 인기도 변경해줌!
+				attractionInfo[i].waiting = rand() % 10 + 20; //놀이기구의 인기도
 			}
 		}
 	}
@@ -56,7 +70,8 @@ double calEdge() {
 int minDistance()
 {
 	//비교를 위해 가장 작은 값 만들어줌
-	int min = INT_MAX, min_index;
+	double min = INT_MAX;
+	int min_index = 0;
 
 	//아직 방문하지 않은 노드이고, 거리가 제일 가까운 놀이기구라면 min_index값을 그 놀이기구의 값으로 바꿔줌.
 	for (int v = 0; v < MAX; v++)
@@ -70,14 +85,12 @@ int minDistance()
 // 결과값 출력 함수
 void printSolution()
 {
-	printf("Vertex \t\t Distance from Source\n");
-	for (int i = 0; i < MAX; i++) {
-		printf("visit: ");
-		for (int j = 0;j < MAX;j++) {
-			printf("-> %d", order[j]);
-		}
-		printf("\n%d \t\t\t\t %lf\n", i, routeInfo[i].distance);
+	int i = 0;
+	printf("visit: ");
+	for (i = cnt; i < MAX; i++) {
+		printf("-> %d", order[i]);
 	}
+	printf("\n\n");
 }
 
 void dijkstra(int src)
@@ -85,14 +98,17 @@ void dijkstra(int src)
 	//처음의 거리값 무한으로 초기화 && 아직 어떤 놀이기구에도 방문을 하지 않았으니 0으로 초기화.
 	for (int i = 0; i < MAX; i++) {
 		routeInfo[i].distance = INT_MAX;
-		routeInfo[i].possible = false;
+		if (attractionInfo[i].visit == 1)
+			routeInfo[i].possible = true;
+		else if (attractionInfo[i].visit == 0)
+			routeInfo[i].possible = false;
 	}
 
 	//출발지에서 출발지로 가는 거리는 0이므로 0으로 초기화
 	routeInfo[src].distance = 0.0;
 
 	//가장 짧은 거리 찾기
-	for (int count = 0; count < MAX - 1; count++) {
+	for (int count = cnt; count < MAX; count++) {	//여기 count랑 전역변수 cnt 다른거 꼭 유의하기!
 		//놀이기구 집합에서 가장 작은 거리를 찾음.
 		//첫번째 반복에서 u는 출발지의 의미를 지님
 		//-> 출발지에서 출발지로 가는 거리를 0으로 초기화했기 때문에 첫번째 반복에서 min값은 당연하게 0임.
@@ -121,19 +137,28 @@ int main() {
 	dijkstra(0);
 
 	while (1) {
+		srand(time(NULL));
 		int num;
 		//1입력하면 다시 프로그램 실행
 		scanf("%d", &num);
 
-		if (num == 1) {
+		if (num == 1 && cnt < 10) {
+			attractionInfo[order[cnt]].visit = 1;
+			cnt++;
 			//다시 랜덤으로 돌리고 다익스트라 알고리즘 처음부터 돌리는 코드임! 테이블 업데이트하는 코드 아님!!!!!!!!!
 			calEdge();
-			dijkstra(0);
+			dijkstra(order[cnt]);	//cnt번째 놀이기구를 시작으로 다시 거리계산해 다음 놀이기구 정함.
 		}
 		//0입력하면 그냥 종료
-		else if (num == 0) {
+		else if (num == 0 && cnt < 10) {
 			exit(0);
 		}
+
+		else if (cnt >= 10) {
+			printf("놀이기구 다탔어용~!~!~!");
+			exit(0);
+		}
+		
 		else {
 			printf("문제생긴듯,,,ㅜㅜ");
 		}
@@ -141,7 +166,3 @@ int main() {
 
 	return 0;
 }
-
-
-//수정된 값대로 테이블 업데이트하는 함수 만들어야 됨!!
-//인기도 가중치 저기에 넣는게 맞는지 확인해야 됨!!

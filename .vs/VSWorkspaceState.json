@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.idea",
+    "\\src"
   ],
-  "SelectedNode": "\\main.c",
+  "SelectedNode": "\\src\\main.c",
   "PreviewInSolutionExplorer": false
 }
