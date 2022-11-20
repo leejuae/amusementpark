@@ -33,7 +33,7 @@ int cnt = 0;	//0이면 거리정보랑 인기도를 처음에 랜덤으로 초�
 
 /*함수들*/
 void calEdge();	//위치 기준으로 거리 계산하는 함수
-int minDistance();	//최소거리 계산함수
+int cost();	//가중치 계산함수
 void printAttractionRoute();
 void dijkstra(int);	//다익스트라 알고리즘 수행
 
@@ -71,8 +71,8 @@ void calEdge() {
 	}
 }
 
-// shortest path tree에 아직 포함되지 않은 놀이기구들 중 가장 거리가 가까운 놀이기구를 찾는 함수
-int minDistance()
+// shortest path tree에 아직 포함되지 않은 놀이기구들 중 가장 cost 작은 놀이기구를 찾는 함수
+int cost()
 {
 	//비교를 위해 가장 작은 값 만들어줌
 	double min = INT_MAX;
@@ -80,7 +80,7 @@ int minDistance()
 
 	//아직 방문하지 않은 노드이고, 거리가 제일 가까운 놀이기구라면 min_index값을 그 놀이기구의 값으로 바꿔줌.
 	for (int v = 0; v < MAX; v++)
-		if (routeInfo[v].possible == false && routeInfo[v].distance <= min)
+		if (routeInfo[v].possible == false && (routeInfo[v].distance + attractionInfo[v].waiting) <= min)
 			min = routeInfo[v].distance + attractionInfo[v].waiting, min_index = v;	//!!!!!!!!!!!!!!!!!!!!!!!!!여기에 waiting 들어가면 되는게 맞나??????????????????????????????
 
 	//가장 가까운 놀이기구의 값 리턴
@@ -116,7 +116,7 @@ void dijkstra(int src)
 		//놀이기구 집합에서 가장 작은 거리를 찾음.
 		//첫번째 반복에서 u는 출발지의 의미를 지님
 		//-> 출발지에서 출발지로 가는 거리를 0으로 초기화했기 때문에 첫번째 반복에서 min값은 당연하게 0임.
-		int u = minDistance();
+		int u = cost();
 
 		routeInfo[u].possible = true;	//방문했으므로 값을 true로 바꿔줌.
 		order[count] = u;	//방문한 놀이기구들을 저장.
