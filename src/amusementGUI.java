@@ -15,9 +15,9 @@ public class amusementGUI extends JFrame {
     public static int cnt = 0;
     Main algorithm;
     public static int num = 1;
-    public static int buttonCount = 0; //���씠湲곌뎄 諛묒뿉 踰꾪듉留뚮뱾�뼱�꽌 �겢由��븯硫댁꽌 �떎�쓬 諛⑸Ц ���씠湲곌뎄 李� �쓣�슱 �븣 �궗�슜�븷寃�!!
+    public static int buttonCount = 0; //Make a button under the ride and click it and use it to open the window for the next visit!!
     public static int[][] saveRoute = new int[MAX][MAX];
-    //--> gui�떎�뻾�븯硫댁꽌 �뒪���듃 踰꾪듉 �늻瑜닿퀬 吏��룄 �쓣�슦�뒗�룞�븞 �븿�닔媛� �쟾遺� �떎�뻾�릺�뼱踰꾨┝!! 洹몃옒�꽌 �븿�닔 �떎�뻾�븯�뒗�룞�븞 �룎由щ뒗 �떆媛꾨퀎 猷⑦듃瑜� �뵲濡� ���옣�빐�꽌 �굹以묒뿉 異쒕젰�븷�븣 �궗�슜�븷 寃�!
+    //--> While running the gui, all functions were executed while pressing the start button and floating the map!! So, save the time-by-time route that you turn while executing the function and use it to print it out later!
 
 
 
@@ -53,7 +53,7 @@ public class amusementGUI extends JFrame {
         JButton button = new JButton("Let's Go!");
         button.setFont(f1);
         button.setBounds(110, 380, 125, 40);
-        button.setFocusPainted(false); //Button �닃���쓣 �븣 �뀒�몢由� �븞 �깮湲곌쾶
+        button.setFocusPainted(false); //If you press Button, make sure that it doesn't have a border
         button.setBackground(Color.pink);
         add(button);
 
@@ -79,11 +79,11 @@ public class amusementGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /**
-         * button �늻瑜대㈃, �솕硫� �쟾�솚
+         * Press button, switch screen
          */
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setVisible(false); //李� �븞 蹂댁씠寃� �븯湲�
+                setVisible(false); //To hide the window
                 new information();
             }
 
@@ -91,7 +91,7 @@ public class amusementGUI extends JFrame {
     }
 
     /**
-     * �젙蹂� �엯�젰
+     * Enter information
      */
     public class information extends JFrame {
         information() {
@@ -184,7 +184,7 @@ public class amusementGUI extends JFrame {
             add(m10);
 
             /**
-             * �늻瑜대㈃ �븣怨좊━利� �떎�뻾
+             * Press to run algorithm
              */
             JButton b2 = new JButton("놀이기구 타러가기");
             b2.setFocusPainted(false);
@@ -198,20 +198,20 @@ public class amusementGUI extends JFrame {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             /**
-             * �븣怨좊━利� �떎�뻾
+             * Run Algorithms
              */
             b2.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    setVisible(false); //李� �븞 蹂댁씠寃� �븯湲�
+                    setVisible(false); //To hide the window
                     algorithm = new Main();
                     //num = 1;
-                    new route();//�깙�듅 �닚�꽌!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    new route();//Boarding order
                 }
             });
         }
 
         /**
-         * �븣怨좊━利� �떎�뻾
+         * Run Algorithms
          */
         public class route extends JFrame {
             route() {
@@ -219,23 +219,23 @@ public class amusementGUI extends JFrame {
                 setBounds(100, 100, 600, 600);
                 setLayout(null);
                 setTitle("Route");
-                //���씠湲곌뎄 �쐞移� 蹂댁뿬二쇨린...? random�씠�씪 �씠�긽�빐�꽌 媛� 醫뚰몴�뿉 5�뵫 怨깊븿,,
+                //Showing the location of the ride.It's weird because it's random, so multiply each coordinate by 5
                 String[] n = new String[MAX];
                 JLabel[] a = new JLabel[MAX];
-                JLabel[] ord = new JLabel[MAX]; //踰꾪듉 �븘�옒�뿉 �닚�꽌 踰꾪듉 蹂댁씠湲�!
+                JLabel[] ord = new JLabel[MAX]; //Show order buttons under buttons!
 
                 for (int i = 0; i < MAX; i++) {
 
                     n[i] = a_info[saveRoute[buttonCount][i]].getName();
                     a[i] = new JLabel(n[i]);
-                    a[i].setBounds(a_info[saveRoute[buttonCount][i]].getX() * 5, a_info[saveRoute[buttonCount][i]].getY() * 5, 150, 50);
-                    a[i].setFont(f5);
+                    a[i].setBounds(a_info[saveRoute[buttonCount][i]].getX() * 5, a_info[saveRoute[buttonCount][i]].getY() * 5, 130, 50);
+                    a[i].setFont(f6);
 
-                    JButton restartButton = new JButton("START HERE!!");
+                    JButton restartButton = new JButton("!START HERE!");
 
-                    if(buttonCount == i){    //留뚯빟 �쁽�옱 諛⑸Ц以묒씤 �끂�뱶�씪寃쎌슦!
+                    if(buttonCount == i){    //If the node is currently visiting!
                         restartButton.setFocusPainted(false);
-                        restartButton.setBounds(a_info[saveRoute[buttonCount][i]].getX() * 5, a_info[saveRoute[buttonCount][i]].getY() * 5 + 40, 170, 20);
+                        restartButton.setBounds(a_info[saveRoute[buttonCount][i]].getX() * 5, a_info[saveRoute[buttonCount][i]].getY() * 5 + 40, 150, 20);
                         restartButton.setBackground(Color.pink);
                         restartButton.setFont(f6);
 
@@ -256,7 +256,7 @@ public class amusementGUI extends JFrame {
 
                     restartButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            setVisible(false); //李� �븞 蹂댁씠寃� �븯湲�
+                            setVisible(false); //To hide the window
                             buttonCount++;
                             new route();
                         }
@@ -280,29 +280,15 @@ public class amusementGUI extends JFrame {
     public class endMessage extends JFrame{
 
         endMessage(){
-            setBounds(100, 100, 370, 220);
+            setBounds(100, 100, 350, 480);
             setLayout(null);
-            
-            JPanel pn = new JPanel();
-            pn.setBounds(30, 30, 295, 125);
-            pn.setBackground(Color.pink);
-            
-            JLabel lb2 = new JLabel("See you");
-            lb2.setFont(f4);
-            lb2.setBounds(40, 47, 290, 40);
-            add(lb2);
-            
-            JLabel lb3 = new JLabel("next Adventure ^o^");
-            lb3.setFont(f4);
-            lb3.setBounds(40, 92, 290, 40);
-            add(lb3);
-            /*JLabel lb2 = new JLabel("<html><body><center>See you next adventure~!</center></body></html>");
+
+            JLabel lb2 = new JLabel("<html><body><center>See you next adventure~!</center></body></html>");
             lb2.setFont(f6);
             lb2.setForeground(Color.pink);
             lb2.setBounds(15, 205, 280, 70);
-            add(lb2);*/
-			
-            add(pn);
+            add(lb2);
+
             setVisible(true);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
@@ -335,22 +321,22 @@ public class amusementGUI extends JFrame {
 
 
             do {
-		            /*Scanner scan = new Scanner(System.in);
-		            num = scan.nextInt();*/
+                  /*Scanner scan = new Scanner(System.in);
+                  num = scan.nextInt();*/
 
                 if (num == 1 && cnt <= 10) {
                     calEdge();
-                    dijkstra(order[cnt]);	//cnt踰덉㎏ ���씠湲곌뎄瑜� �떆�옉�쑝濡� �떎�떆 嫄곕━怨꾩궛�빐 �떎�쓬 ���씠湲곌뎄 �젙�븿.
+                    dijkstra(order[cnt]);   //Starting with the CNT ride, the distance is calculated again and the next ride is decided.
                     printAttractionRoute();
                     a_info[order[cnt]].setVisit(1);
                     cnt++;
                 }
-                //0�엯�젰�븯硫� 洹몃깷 醫낅즺
+                //If you type 0, it's over
                 else if (num == 0 && cnt <= 10) {
                     System.out.print("Stop riding. Exit");
                     break;
                 }
-                //cnt==11 �릺硫� ���씠湲곌뎄 �떎 �깂嫄몃줈 媛꾩＜�븯怨� 醫낅즺
+                //When CNT == 11, it's considered that we're all on the ride
                 else if (cnt > 10) {
                     System.out.print("Visited all the rides!!");
                     break;
@@ -362,7 +348,7 @@ public class amusementGUI extends JFrame {
         }
     }
 
-    //�옖�뜡�븿�닔
+    //random function
     public int rand(int k){
         Random Rand = new Random();
         int iValue = Rand.nextInt(k);   //0 <- iValue < k
@@ -371,24 +357,24 @@ public class amusementGUI extends JFrame {
     }
 
 
-    //�궃�닔 �깮�꽦
+    //Random number generation
     public void calEdge(){
         if (cnt == 0){
             for(int i = 0; i < MAX; i++){
-                a_info[i].setX(rand(100));  //0-100源뚯��쓽 踰붿쐞�뿉�꽌 臾댁옉�쐞濡� 媛� �븯�굹 諛쏆븘�샂.
-                a_info[i].setY(rand(100));  //�룞�씪
-                a_info[i].setWaiting(rand(30)); //���씠湲곌뎄�쓽 �씤湲곕룄 0-30
-                a_info[i].setVisit(0);  //�븘吏� �븘臾닿쾬�룄 �븞�깘
+                a_info[i].setX(rand(100));  //Received one value at random in the range from 0 to 100.
+                a_info[i].setY(rand(100));  //same as above
+                a_info[i].setWaiting(rand(30)); //The popularity of rides is 0-30
+                a_info[i].setVisit(0);  //Not yet on the ride
             }
 
-            //嫄곕━媛믪� 蹂��븯吏� �븡湲� �븣臾몄뿉 �븳踰덈쭔 怨꾩궛�빐以�!! waiting媛믩쭔 媛�以묒튂濡� �꽕�젙�빐 min 媛� 鍮꾧탳�뿉 �씠�슜留� �븿.
+            //The distance value does not change, so please calculate it just once! Only the waiting value is set as a weight and used to compare min values.
             for(int i = 0; i < MAX; i++){
                 for(int j = 0; j < MAX; j++){
                     if(i == j){
-                        edge[i][j] = 0; //留뚯빟 i�� j媛� �룞�씪�븯�떎硫�(a���씠湲곌뎄�뿉�꽌 a���씠湲곌뎄濡� 媛��뒗 媛믪� 0) 0�쑝濡� 珥덇린�솕
+                        edge[i][j] = 0; //If i and j are the same (the value from ride a to ride a is 0), initialize to zero
                     }
 
-                    //i吏��젏怨� j吏��젏�쓽 嫄곕━怨꾩궛
+                    //Calculation of the distance between point i and point j
                     else{
                         edge[i][j] = Math.sqrt(Math.pow(a_info[i].getX() - a_info[j].getX(), 2) + Math.pow(a_info[i].getY() - a_info[j].getY(), 2));
                     }
@@ -398,7 +384,7 @@ public class amusementGUI extends JFrame {
 
         else if(cnt >= 1){
             for(int i = 0; i < MAX; i++){
-                //諛⑸Ц�븯吏� �븡�븯�떎硫� �씤湲곕룄瑜� 蹂�寃쏀빐以�
+                //Change popularity if not visited
                 if(a_info[i].getVisit() == 0){
                     a_info[i].setWaiting(rand(30));
                 }
@@ -406,16 +392,16 @@ public class amusementGUI extends JFrame {
         }
 
         else{
-            System.out.println("calEdge error");
+            System.out.println("calEdge Error");
         }
     }
 
     public int mincost(){
-        //鍮꾧탳瑜� �쐞�빐 媛��옣 �옉�� 媛� 留뚮뱾�뼱以�
+        //Creates the smallest value for comparison
         double min = Integer.MAX_VALUE;
         int min_index = 0;
 
-        //�븘吏� 諛⑸Ц�븯吏� �븡�� �끂�뱶�씠怨�, 嫄곕━媛� �젣�씪 媛�源뚯슫 ���씠湲곌뎄�씪硫� min_index媛믪쓣 洹� ���씠湲곌뎄�쓽 媛믪쑝濡� 諛붽퓭以�.
+        //If it is a node that has not yet been visited, and the ride is the closest to the distance, it changes the min_index value to the ride's value.
         for (int v = 0; v < MAX; v++) {
             if (r_info[v].isPossible() == false && (r_info[v].getDistance() + a_info[v].getWaiting() <= min)) {
                 min = r_info[v].getDistance() + a_info[v].getWaiting();
@@ -423,7 +409,7 @@ public class amusementGUI extends JFrame {
             }
         }
 
-        //媛��옣 媛�源뚯슫 ���씠湲곌뎄�쓽 媛� 由ы꽩
+        //Return the value of the nearest ride
         return min_index;
     }
 
@@ -445,7 +431,7 @@ public class amusementGUI extends JFrame {
 
     public void dijkstra(int src)
     {
-        //泥섏쓬�쓽 嫄곕━媛� 臾댄븳�쑝濡� 珥덇린�솕 && �븘吏� �뼱�뼡 ���씠湲곌뎄�뿉�룄 諛⑸Ц�쓣 �븯吏� �븡�븯�쑝�땲 0�쑝濡� 珥덇린�솕.
+        //Initialize the initial distance value to infinity && reset to zero since you haven't visited any rides yet.
         for (int i = 0; i < MAX; i++) {
             r_info[i].setDistance(Integer.MAX_VALUE);
             if (a_info[i].getVisit() == 1)
@@ -454,24 +440,24 @@ public class amusementGUI extends JFrame {
                 r_info[i].setPossible(false);
         }
 
-        //異쒕컻吏��뿉�꽌 異쒕컻吏�濡� 媛��뒗 嫄곕━�뒗 0�씠誘�濡� 0�쑝濡� 珥덇린�솕
+        //Initiate to zero since distance from origin to origin is zero
         r_info[src].setDistance(0.0);
 
-        //媛��옣 吏㏃� 嫄곕━ 李얘린
-        for (int count = cnt; count < MAX; count++) {	//�뿬湲� count�옉 �쟾�뿭蹂��닔 cnt �떎瑜멸굅 瑗� �쑀�쓽�븯湲�!
-            //���씠湲곌뎄 吏묓빀�뿉�꽌 媛��옣 �옉�� 嫄곕━瑜� 李얠쓬.
-            //泥ル쾲吏� 諛섎났�뿉�꽌 u�뒗 異쒕컻吏��쓽 �쓽誘몃�� 吏��떂
-            //-> 異쒕컻吏��뿉�꽌 異쒕컻吏�濡� 媛��뒗 嫄곕━瑜� 0�쑝濡� 珥덇린�솕�뻽湲� �븣臾몄뿉 泥ル쾲吏� 諛섎났�뿉�꽌 min媛믪� �떦�뿰�븯寃� 0�엫.
+        //Find the shortest distance
+        for (int count = cnt; count < MAX; count++) {   //Make sure to note that the count and the global variable CNT are different!
+            //Finding the smallest distance in the ride collection.
+            //In the first iteration, u means the place of origin
+            //-> Since the distance from the origin to the origin was initialized to 0, the min value in the first iteration is naturally 0.
             int u = mincost();
 
-            r_info[u].setPossible(true);	//諛⑸Ц�뻽�쑝誘�濡� 媛믪쓣 true濡� 諛붽퓭以�.
-            order[count] = u;	//諛⑸Ц�븳 ���씠湲곌뎄�뱾�쓣 ���옣.
+            r_info[u].setPossible(true);   //Change the value to true because you visited
+            order[count] = u;   //Save the rides you visited.
 
-            //諛⑸Ц�븳 ���씠湲곌뎄媛� �깮寃쇱쑝�땲 嫄곕━媛믪쓣 �닔�젙�빐以�
+            //We have a new ride, so please modify the street value
             for (int v = 0; v < MAX; v++)
-                //�븘吏� 諛⑸Ц�쓣 �븞�빐�꽌 possible媛믪씠 false�씪 �븣留� �닔�젙�빐以�!
-                // �삉�븳 u�뿉�꽌 v源뚯� 媛��뒗 媛믪씠 議댁옱�븯怨�
-                // u瑜� �넻�빐�꽌 異쒕컻吏��뿉�꽌 v濡� 媛��뒗 湲몄씠 routeInfo[v]�쓽 嫄곕━媛믩낫�떎 �옉�쓣 �븣留� �닔�젙
+                //I haven't visited it yet, so please correct it only when the posible value is false!
+                // There is also a value from u to v
+                // Modify only when the length from origin to v through u is less than the distance value of routeInfo[v]
                 if (!r_info[v].isPossible() && edge[u][v] != 0.0
                         && (r_info[u].getDistance() != Integer.MAX_VALUE)
                         && (r_info[u].getDistance() + edge[u][v] < r_info[v].getDistance()))
@@ -479,10 +465,7 @@ public class amusementGUI extends JFrame {
         }
     }
 
-
-
     public static void main(String[] args) {
         new amusementGUI();
     }
-
 }
